@@ -1,86 +1,98 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<string.h>
+#include<string.h>  
 //NOTE: struct employee
 struct Employee{
     char name[30];
     char province[30];
     int year;
 };
-void enter(Employee &input);// NOTE: hàm nhập 1 nhân viên
-void print(Employee *input); // NOTE: hàm xuất 1 nhân viên
-void enterEmployee(Employee *&input, int &amount);// NOTE: nhập danh sách nhân viên
-void printEmployee(Employee *input, int amount);// NOTE:xuất danh sách nhân viên
+void enter(Employee *employee);// NOTE: hàm nhập 1 nhân viên
+void print(Employee *employee); // NOTE: hàm xuất 1 nhân viên
+void enter(Employee *&employee, int &amount);// NOTE: nhập danh sách nhân viên
+void print(Employee *employee, int amount);// NOTE:xuất danh sách nhân viên
 // NOTE: main
 int main()
 {
     Employee *employee;
     int amount = 0;
-    enterEmployee(employee, amount);
+    employee = (Employee*)malloc(sizeof(Employee));
+    enter(employee, amount);
     arrange(employee, amount);
-    printEmployee(employee, amount);
+    print(employee, amount);
+    count(employee, amount);
     return 0;
 }
-void enter(Employee *input)
+void enter(Employee *employee)
 {
-    printf("nhap ten nhan vien: ");
+    printf("Name of employee: \n");
     fflush(stdin);
-    gets(input->name);
-    fflush(stdin);
-    printf("province of employee: ");
-    gets(input->province);
-    printf("year of birth of employee: ");
-    scanf("%d", &input->year);
+    gets(employee->name);
+    printf("province of employee: \n");
+    gets(employee->province);
+    printf("year of birth of employee: \n");
+    scanf("%d", &employee->year);
 }
-/*void print(Employee *input)
+void print(Employee *employee)
 {
-    printf("ten nhan vien: %s", input->name);
-    printf("province of employee: %s", input->province);
-    printf("year of bỉth of employee: %d", input->year);
-}*/
-void enterEmployee(Employee *&input, int &amount)
+    printf("Name of employee: %s\n", employee->name);
+    printf("province of employee: %s\n", employee->province);
+    printf("year of bỉth of employee: %d\n", employee->year);
+}
+void enter(Employee *&employee, int &amount)
 {
     // NOTE: nhập số lượng
-    printf("Nhap vao so luong nhan vien: ");
+    printf("Nhap vao so luong nhan vien: \n");
     scanf("%d", &amount);
     /// NOTE: cấp phát bộ nhớ
-    input = (Employee*)malloc(amount * sizeof(Employee));
+    employee = (Employee*)realloc(employee, (amount)*sizeof(Employee));
     // NOTE: nhập vào lần lượt các nhân viên
     for(int index = 0; index < amount; index++){
         printf("Nhap thong tin nhan vien thu %d \n", index);
-        enter(&*(input+index));
+        enter(&*(employee+index));
     }
 }
-void arrange(Employee *input, int amount)
+void arrange(Employee *employee, int amount)
 {
     Employee temp;
     for(int i = 0; i < amount-1; i++){
         for(int j = i+1; j < amount; j++){
-            if(strcmp((input+i)->province, (input+j)->province) < 0){
-                temp = *(input+i);
-                *(input+i) = *(input+j);
-                *(input+j) = temp;
+            if(strcmp((employee+i)->province, (employee+j)->province) < 0){
+                temp = *(employee+i);
+                *(employee+i) = *(employee+j);
+                *(employee+j) = temp;
             }
         }
     }
 }
-void count(Employee *input, int amount)
+void count(Employee *employee, int amount)
 {
     int count = 0;
     for(int i = 0; i < amount-1; i++){
         for(int j = i+1; j < amount; j++){
-            if(strcmp((input+i)->province, (input+j)->province) == 0){
+            if(strcmp((employee+i)->province, (employee+j)->province) == 0){
                 count ++;
             }
             else{
-                printf("\nTinh %s có %d nhan vien", (input+i)->province, count);
+                printf("Tinh %s có %d nhan vien\n", (employee+i)->province, count);
                 count = 0;
             }
         }
     }
 }
-void printfEmployee(Employee *output, int amount){
+void findByProvince(Enployee *employee, int amount, char search[30]){
+    fflush(stdin);
+    printf("\nNhap Tỉnh: ");
+    gets(search);
     for(int index = 0; index < amount; index++){
-        printf("\t%s\n\t%s\n\t%d", (output+index)->name, (output+index)->province, (output+index)->year);
+        if(strcmp((employee+index)->province, search) == 0){
+            printf("\t%s\n\t%s\n\t%d", (employee+index)->Name, (employee+index)->Province, (employee+index)->Year)
+        }
+    }
+}
+void printf(Employee *employee, int amount){
+    for(int index = 0; index < amount; index++){
+        printf("Nhan vien thu %d \n", index);
+        printf(employee+index);
     }
 }
